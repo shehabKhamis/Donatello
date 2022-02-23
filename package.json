@@ -1,0 +1,30 @@
+{
+  "name": "donatello",
+  "version": "1.0.0",
+  "description": "graduation project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shehabKhamis/Donatello.git"
+  },
+  "author": "shehab",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shehabKhamis/Donatello/issues"
+  },
+  "homepage": "https://github.com/shehabKhamis/Donatello#readme",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.16.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
