@@ -9,14 +9,17 @@ module.exports.getCases=(req,res,next)=>
         {
         if(!result.length)
         {
-            const error = new Error("there are no cases")
-            //203 ----> no content
+            const error = new Error("There are no cases")
+            //204 ----> no content
             error.statusCode=204;
-            throw error;
+            next(error);
 
         }
-        
-        res.status(200).json({cases:result})
+        else
+            {
+                res.status(200).json({cases:result})
+
+            } 
     } )
     .catch(err=>{
         if(!err.statusCode)
@@ -45,7 +48,11 @@ module.exports.postCase=(req,res)=>
     })
     .catch(err=>
         {
-            console.log(err)
+            if(!err.statusCode)
+            {
+                err.statusCode=500;
+            }
+            next(err);
         })
     
 }
@@ -53,15 +60,23 @@ module.exports.postCase=(req,res)=>
 
 module.exports.getCase=(req,res,next)=>{
     const caseId= req.params.caseId;
-    Case.findAll({where : {id : caseId}})
+    Case.findAll({where : {Caseid : caseId}})
     .then(result=>{
+        console.log("ana ahooooooooooooooo")
         if(!result.length)
         {
+            console.log("ana ahooooooooooooooo tanyyyyyyyyyyy")
             const error=new Error('could not find case');
             error.statusCode=404;
-            throw error;
+            next(error) ;
         }
+        else
+        {
+
+            console.log("ezaaaay")
         res.status(200).json({case : result})
+        }
+        
     })
     .catch(err=>
         {

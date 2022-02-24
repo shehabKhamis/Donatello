@@ -4,7 +4,7 @@ const sequelize = require('../connection/sequelize')
 
 const Case= sequelize.define('case',{
 
-    id :{
+    CaseId :{
         type : Sequelize.INTEGER.UNSIGNED,
         autoIncrement:true,
         allowNull : false,
