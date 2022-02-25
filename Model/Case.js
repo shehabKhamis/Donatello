@@ -36,7 +36,23 @@ const Case= sequelize.define('case',{
     imageUrl : 
     {
         type : Sequelize.STRING
-    }
+    },
+    level : 
+    {
+        type : Sequelize.STRING,
+        allowNull : false
+    },
+    distance : 
+    {
+        type : Sequelize.FLOAT.UNSIGNED,
+        allowNull : false
+    },
+    tags : 
+    {
+        type : Sequelize.JSON,
+        allowNull : false
+    },
+    
    
 
 })

@@ -40,7 +40,11 @@ module.exports.postCase=(req,res)=>
         description : req.body.description,
         goal : req.body.goal,
         imageUrl : req.body.imageUrl,
-        toGo : req.body.goal
+        toGo : req.body.goal,
+        distance:req.body.distance,
+        level:req.body.level,
+        tags:req.body.tags
+
 
     }).then(result=>{
         res.status(201).json({
