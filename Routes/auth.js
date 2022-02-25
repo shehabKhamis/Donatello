@@ -22,10 +22,10 @@ router.put('/signup',[
         return User.findOne({where :{email : value}})
         .then(result=>
             {
-                console.log("hena")
+                
                 if(result)
                 {
-                    console.log("ahooooooo")
+                    
                     return Promise.reject("E-mail already in use.")
                 }
                 else
@@ -56,6 +56,11 @@ router.put('/signup',[
     .withMessage("Name field is required")
 
 ],authController.signup)
+
+
+
+
+router.post('/login',authController.login)
 
 
 
