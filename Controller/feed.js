@@ -43,7 +43,8 @@ module.exports.postCase=(req,res)=>
         toGo : req.body.goal,
         distance:req.body.distance,
         level:req.body.level,
-        tags:req.body.tags
+        tags:req.body.tags,
+        category : req.body.category
 
 
     }).then(result=>{
@@ -66,10 +67,10 @@ module.exports.getCase=(req,res,next)=>{
     const caseId= req.params.caseId;
     Case.findAll({where : {Caseid : caseId}})
     .then(result=>{
-        console.log("ana ahooooooooooooooo")
+        
         if(!result.length)
         {
-            console.log("ana ahooooooooooooooo tanyyyyyyyyyyy")
+            
             const error=new Error('could not find case');
             error.statusCode=404;
             next(error) ;
@@ -77,7 +78,7 @@ module.exports.getCase=(req,res,next)=>{
         else
         {
 
-            console.log("ezaaaay")
+            
         res.status(200).json({case : result})
         }
         
