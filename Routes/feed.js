@@ -4,7 +4,11 @@ const router =express.Router()
 const feedController= require('../Controller/feed');
 
 
-router.get('/home',feedController.getCases)
+const userAuth = require('../middleware/userAuth')
+
+
+
+router.get('/home',userAuth,feedController.getCases)
 
 
 router.post('/home',feedController.postCase)

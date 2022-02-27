@@ -10,6 +10,7 @@ const User = require('../Model/User');
 const authController = require('../Controller/auth')
 
 
+
 router.put('/signup',[
 
     body('email')

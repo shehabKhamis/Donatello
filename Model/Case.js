@@ -52,6 +52,12 @@ const Case= sequelize.define('case',{
         type : Sequelize.JSON,
         allowNull : false
     },
+    category : 
+    {
+        type : Sequelize.STRING,
+        allowNull : false
+
+    }
     
    
 

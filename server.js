@@ -41,7 +41,7 @@ app.use((error,req,res,next)=>
 User.hasMany(Case,{constraints : true,onDelete :'CASCADE'});
 
 
-sequalize.sync({force : true})
+sequalize.sync()
 .then(result=>{
     app.listen(process.env.PORT || 3000,()=>{
         console.log("working")

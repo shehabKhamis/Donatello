@@ -33,7 +33,7 @@ module.exports.getCases=(req,res,next)=>
 
 
 
-module.exports.postCase=(req,res)=>
+module.exports.postCase=(req,res,next)=>
 {
     Case.create({
         title : req.body.title,
