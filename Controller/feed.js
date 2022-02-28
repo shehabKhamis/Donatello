@@ -35,6 +35,7 @@ module.exports.getCases=(req,res,next)=>
 
 module.exports.postCase=(req,res,next)=>
 {
+    console.log(req.id)
     Case.create({
         title : req.body.title,
         description : req.body.description,
@@ -44,12 +45,13 @@ module.exports.postCase=(req,res,next)=>
         distance:req.body.distance,
         level:req.body.level,
         tags:req.body.tags,
-        category : req.body.category
+        category : req.body.category,
+        creator : req.id
 
 
     }).then(result=>{
         res.status(201).json({
-            case: result});
+            message: "Case is created successfully." });
     })
     .catch(err=>
         {

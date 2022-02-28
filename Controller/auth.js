@@ -63,7 +63,7 @@ module.exports.login=(req,res,next)=>{
         {
             const error = new Error("Email cannot be found, please signup!!")
             error.statusCode=404;
-            throw error;
+            res.status(404).json({message : error.message})
         }
         loadedUser= user;
         return bcrypt.compare(req.body.password,user.password)
@@ -74,7 +74,7 @@ module.exports.login=(req,res,next)=>{
         {
             const err = new Error("Wrong password!");
             err.statusCode=401;
-            throw err;
+            res.status(401).json({message : error.message})
         }
 
         

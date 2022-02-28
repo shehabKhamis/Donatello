@@ -58,6 +58,7 @@ const Case= sequelize.define('case',{
         allowNull : false
 
     }
+
     
    
 

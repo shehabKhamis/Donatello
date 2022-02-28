@@ -15,13 +15,13 @@ module.exports=(req,res,next)=>
     }
     let decoded;
     try{
-         decoded= jwt.verify(token,"SayedRagabMahmoudHemedaToken")
+         decoded= jwt.verify(token,"SayedRagabMahmoudHemedaOrganizationToken")
          console.log(decoded)
     }
     catch(err){
 
         err.statusCode=401;
-        err.message="Not Authenticated as a user!!"
+        err.message="Not Authenticated as an admin!!"
         res.status(401).json({message : err.message});
     }
 
@@ -32,6 +32,7 @@ module.exports=(req,res,next)=>
         throw error;
     }
     req.id=decoded.id;
+    req.name=decoded.name
    
 
     next();

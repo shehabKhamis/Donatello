@@ -11,10 +11,8 @@ const userAuth = require('../middleware/userAuth')
 router.get('/home',userAuth,feedController.getCases)
 
 
-router.post('/home',feedController.postCase)
 
-
-router.get('/home/:caseId',feedController.getCase)
+router.get('/home/:caseId',userAuth,feedController.getCase)
 
 
 

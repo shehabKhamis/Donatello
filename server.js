@@ -8,9 +8,13 @@ const User = require('./Model/User')
 const Case = require('./Model/Case')
 
 
+const Organization = require('./Model/Organization')
+
 const userRoutes = require('./Routes/feed.js')
 
 const authRoutes = require('./Routes/auth')
+
+const orgRoutes = require('./Routes/org')
 
 const app=express();
 
@@ -26,6 +30,8 @@ app.use((req,res,next)=>{
 
 app.use('/feed',userRoutes);
 
+app.use('/org',orgRoutes);
+
 app.use('/auth',authRoutes)
 
 app.use((error,req,res,next)=>
@@ -38,10 +44,10 @@ app.use((error,req,res,next)=>
 
 })
 
-User.hasMany(Case,{constraints : true,onDelete :'CASCADE'});
+Organization.hasMany(Case,{constraints : true,onDelete :'CASCADE',foreignKey: 'creator'});
 
 
-sequalize.sync()
+sequalize.sync({force : true})
 .then(result=>{
     app.listen(process.env.PORT || 3000,()=>{
         console.log("working")
