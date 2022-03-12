@@ -47,7 +47,7 @@ app.use((error,req,res,next)=>
 Organization.hasMany(Case,{constraints : true,onDelete :'CASCADE',foreignKey: 'creator'});
 
 
-sequalize.sync({force : true})
+sequalize.sync()
 .then(result=>{
     app.listen(process.env.PORT || 3000,()=>{
         console.log("working")

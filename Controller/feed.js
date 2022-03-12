@@ -33,36 +33,7 @@ module.exports.getCases=(req,res,next)=>
 
 
 
-module.exports.postCase=(req,res,next)=>
-{
-    console.log(req.id)
-    Case.create({
-        title : req.body.title,
-        description : req.body.description,
-        goal : req.body.goal,
-        imageUrl : req.body.imageUrl,
-        toGo : req.body.goal,
-        distance:req.body.distance,
-        level:req.body.level,
-        tags:req.body.tags,
-        category : req.body.category,
-        creator : req.id
 
-
-    }).then(result=>{
-        res.status(201).json({
-            message: "Case is created successfully." });
-    })
-    .catch(err=>
-        {
-            if(!err.statusCode)
-            {
-                err.statusCode=500;
-            }
-            next(err);
-        })
-    
-}
 
 
 module.exports.getCase=(req,res,next)=>{

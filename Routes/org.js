@@ -3,7 +3,7 @@ const router =express.Router()
 
 const {body}=require('express-validator')
 
-const feedController= require('../Controller/feed');
+const adminController= require('../Controller/admin');
 
 const orgAuthController= require('../Controller/orgAuth');
 
@@ -13,10 +13,14 @@ const orgAuthMiddleware= require('../middleware/orgAuth');
 const Organization = require('../Model/Organization')
 
 
-router.post('/post',orgAuthMiddleware,feedController.postCase)
+router.post('/post',orgAuthMiddleware,adminController.postCase)
 
 
-router.get('/cases',orgAuthMiddleware,orgAuthController.getOrgCases)
+router.get('/cases',orgAuthMiddleware,adminController.getOrgCases)
+
+
+
+router.delete('/cases/:caseId',orgAuthMiddleware,adminController.deleteCase)
 
 
 router.put('/signup',[

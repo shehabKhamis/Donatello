@@ -74,7 +74,7 @@ module.exports.login=(req,res,next)=>{
         {
             const err = new Error("Wrong password!");
             err.statusCode=401;
-            res.status(401).json({message : error.message})
+            res.status(401).json({message : err.message})
         }
 
         

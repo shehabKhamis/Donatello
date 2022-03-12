@@ -103,31 +103,3 @@ module.exports.login=(req,res,next)=>{
 
 
 
-module.exports.getOrgCases=(req,res,next)=>{
-
-    Case.findAll({where:{caseId : req.id}})
-    .then(result=>{
-
-        if(!result.length)
-        {
-            
-            const error=new Error('There are no cases so far !');
-            error.statusCode=404;
-            res.status(404).json({message : error.message})
-        }
-        else
-        {
-
-            
-        res.status(200).json({case : result})
-        }
-
-    })
-
-
-
-
-
-
-
-}

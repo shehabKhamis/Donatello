@@ -35,7 +35,7 @@ const Case= sequelize.define('case',{
     },
     imageUrl : 
     {
-        type : Sequelize.STRING
+        type : Sequelize.TEXT
     },
     level : 
     {
