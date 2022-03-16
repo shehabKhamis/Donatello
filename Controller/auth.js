@@ -32,7 +32,7 @@ module.exports.signup=(req,res,next)=>
             },"SayedRagabMahmoudHemedaToken",{expiresIn:'1h'})
     
 
-            res.status(201).json({token : token,id : user.id})
+            res.status(201).json({token : token,id : user.id,name : user.name,email:user.email})
 
         })
         .catch(err=>{
@@ -84,7 +84,7 @@ module.exports.login=(req,res,next)=>{
 
         },"SayedRagabMahmoudHemedaToken",{expiresIn:'1h'})
 
-        res.status(200).json({token : token,id : loadedUser.id})
+        res.status(200).json({token : token,id : loadedUser.id,name : loadedUser.name,email:loadedUser.email})
 
 
     })
