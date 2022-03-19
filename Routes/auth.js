@@ -55,6 +55,23 @@ router.put('/signup',[
     .not()
     .isEmpty()
     .withMessage("Name field is required")
+    ,
+    body('confirm')
+    .trim()
+    .not()
+    .isEmpty()
+    .custom((value,{req})=>{
+        if(value === req.body.password)
+        {
+            return true;
+        }
+        else{
+            throw new Error("passwords are not matched.")
+
+        }
+
+
+    })
 
 ],authController.signup)
 
