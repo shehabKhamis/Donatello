@@ -58,8 +58,7 @@ router.put('/signup',[
     ,
     body('confirm')
     .trim()
-    .not()
-    .isEmpty()
+    
     .custom((value,{req})=>{
         if(value === req.body.password)
         {
