@@ -7,6 +7,8 @@ const User = require('./Model/User')
 
 const Case = require('./Model/Case')
 
+const Proposal = require('./Model/Proposal')
+
 
 const Organization = require('./Model/Organization')
 
@@ -45,6 +47,8 @@ app.use((error,req,res,next)=>
 })
 
 Organization.hasMany(Case,{constraints : true,onDelete :'CASCADE',foreignKey: 'creator'});
+
+User.hasMany(Proposal,{constraints : true,onDelete :'CASCADE',foreignKey: 'submitter'})
 
 
 sequalize.sync()

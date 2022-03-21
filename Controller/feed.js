@@ -1,5 +1,6 @@
 
-let Case = require('../Model/Case')
+let Case = require('../Model/Case');
+const Proposal = require('../Model/Proposal');
 
 
 module.exports.getCases=(req,res,next)=>
@@ -65,4 +66,38 @@ module.exports.getCase=(req,res,next)=>{
             next(err);
 
         })
+}
+
+
+
+module.exports.submitProposal=async (req,res,next)=>{
+
+    try{
+    const created = await Proposal.create({
+        title : req.body.title,
+        description : req.body.description,
+        goal : req.body.goal,
+        name : req.body.name,
+        phoneNum : req.body.phoneNumber,
+        location :req.body.location,
+        category : req.body.category,
+        submitter : req.id
+    })
+    if(created)
+    {
+        res.json({message : "proposal is sent successfully."})
+    }
+
+    }
+
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500;
+        }
+        next(err)
+    }
+
+
 }
