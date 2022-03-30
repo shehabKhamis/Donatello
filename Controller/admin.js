@@ -128,22 +128,25 @@ module.exports.editCase = async (req, res, next) => {
 
     const caseId = req.params.caseId;
     try{
+
         const found = await Case.update({
 
         title: req.body.title,
         description: req.body.description,
         goal: req.body.goal,
         imageUrl: req.body.imageUrl,
-        toGo: req.body.goal,
+        raised : req.body.raised,
+        toGo : req.body.goal - req.body.raised,
         distance: req.body.distance,
         level: req.body.level,
         tags: req.body.tags,
         category: req.body.category,
         creator: req.id
-        },{where : {CaseId : caseId}});
+        },{where : {CaseId : caseId , creator : req.id}});
 
         if(found[0])
         {
+
             res.status(200).json({message : "Case is successfully edited."})
         }
         else
