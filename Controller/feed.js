@@ -1,6 +1,8 @@
 
 let Case = require('../Model/Case');
 const Proposal = require('../Model/Proposal');
+const Organization = require('../Model/Organization');
+
 
 
 module.exports.getCases=(req,res,next)=>
@@ -73,6 +75,12 @@ module.exports.getCase=(req,res,next)=>{
 module.exports.submitProposal=async (req,res,next)=>{
 
     try{
+    const found = await Organization.findOne({where:{orgId : req.body.org}})
+    if(!found)
+    {
+        const err = new Error("there is no organization with this Id.")
+        throw err;
+    }
     const created = await Proposal.create({
         title : req.body.title,
         description : req.body.description,
@@ -81,6 +89,7 @@ module.exports.submitProposal=async (req,res,next)=>{
         phoneNum : req.body.phoneNumber,
         location :req.body.location,
         category : req.body.category,
+        orgId : req.body.org,
         submitter : req.id
     })
     if(created)
@@ -100,4 +109,34 @@ module.exports.submitProposal=async (req,res,next)=>{
     }
 
 
+},
+
+module.exports.getOrganizations=(req,res,next)=>
+{
+    Organization.findAll({attributes :['name','orgId']})
+    .then(result=>
+        {
+        if(!result.length)
+        {
+            
+            const error = new Error("There are no organizations yet.")
+            //204 ----> no content
+            error.statusCode=204;
+            next(error)
+
+        }
+        else
+            {
+                res.status(200).json({organizations:result})
+
+            } 
+    } )
+    .catch(err=>{
+        if(!err.statusCode)
+        {
+            err.statusCode=500;
+        }
+        next(err);
+    })
+   
 }

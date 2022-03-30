@@ -46,9 +46,11 @@ app.use((error,req,res,next)=>
 
 })
 
-Organization.hasMany(Case,{constraints : true,onDelete :'CASCADE',foreignKey: 'creator'});
+Organization.hasMany(Case,{constraints : true,onDelete :'CASCADE',foreignKey: 'creator',allowNull:false});
 
-User.hasMany(Proposal,{constraints : true,onDelete :'CASCADE',foreignKey: 'submitter'})
+User.hasMany(Proposal,{constraints : true,onDelete :'CASCADE',foreignKey: 'submitter',allowNull:false})
+
+Proposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignKey: 'orgId',allowNull:false})
 
 
 sequalize.sync()

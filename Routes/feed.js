@@ -14,6 +14,8 @@ router.get('/home',userAuth,feedController.getCases)
 
 router.get('/home/:caseId',userAuth,feedController.getCase)
 
+router.get('/organizations',userAuth,feedController.getOrganizations)
+
 
 router.post('/submit',userAuth,feedController.submitProposal)
 
