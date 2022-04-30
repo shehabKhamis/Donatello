@@ -18,7 +18,11 @@ router.post('/post', orgAuthMiddleware, adminController.postCase)
 
 router.get('/cases', orgAuthMiddleware, adminController.getOrgCases)
 
+router.get('/proposals', orgAuthMiddleware, adminController.getOrgProposals)
+
 router.get('/cases/:caseId', orgAuthMiddleware, adminController.getCase)
+
+router.get('/proposals/:propId', orgAuthMiddleware, adminController.getProposal)
 
 
 

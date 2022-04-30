@@ -1,6 +1,7 @@
 
 let Case = require('../Model/Case')
 
+let Proposal = require('../Model/Proposal')
 
 
 module.exports.getOrgCases = (req, res, next) => {
@@ -22,6 +23,35 @@ module.exports.getOrgCases = (req, res, next) => {
 
         })
 
+}
+
+module.exports.getOrgProposals = async (req, res, next) => {
+    try{
+    let result = await Proposal.findAll({ where: { orgId: req.id } })
+        
+
+            if (!result.length) {
+
+                const error = new Error('There are no proposals so far !');
+                error.statusCode = 404;
+                res.status(404).json({ message: error.message })
+            }
+            else {
+
+
+                res.status(200).json({ proposal: result })
+            }
+
+      
+        }
+        catch(err){
+
+            if(!err.statusCode)
+            {
+                err.statusCode = 500;
+            }
+            next(err)
+}
 }
 
 
@@ -56,7 +86,8 @@ module.exports.postCase = (req, res, next) => {
 
 module.exports.getCase=(req,res,next)=>{
     const caseId= req.params.caseId;
-    Case.findAll({where : {Caseid : caseId}})
+    const organId = req.id;
+    Case.findAll({where : {Caseid : caseId,creator:organId}})
     .then(result=>{
         
         if(!result.length)
@@ -83,6 +114,40 @@ module.exports.getCase=(req,res,next)=>{
 
         })
 }
+
+
+module.exports.getProposal=(req,res,next)=>{
+    const proposalId= req.params.propId;
+    const organId = req.id;
+    Proposal.findAll({where : {proposalId : proposalId,orgId:organId}})
+    .then(result=>{
+        
+        if(!result.length)
+        {
+            const error=new Error('Proposal is not found or you are not authenticated.');
+            error.statusCode=404;
+            res.status(404).json({message:error.message})
+        }
+        else
+        {
+
+            
+        res.status(200).json({proposal : result})
+        }
+        
+    })
+    .catch(err=>
+        {
+            if(!err)
+            {
+                err.statusCode=500;
+            }
+            next(err);
+
+        })
+}
+
+
 
 
 
@@ -163,12 +228,4 @@ module.exports.editCase = async (req, res, next) => {
         next(err)
 
     }
-    
-
-
-
-    
-
 }
-
-
