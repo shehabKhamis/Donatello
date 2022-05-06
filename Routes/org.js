@@ -24,7 +24,9 @@ router.get('/cases/:caseId', orgAuthMiddleware, adminController.getCase)
 
 router.get('/proposals/:propId', orgAuthMiddleware, adminController.getProposal)
 
+router.put('/proposals/accept/:propId', orgAuthMiddleware, adminController.acceptProposal)
 
+router.delete('/proposals/reject/:propId', orgAuthMiddleware, adminController.rejectProposal)
 
 router.delete('/cases/:caseId', orgAuthMiddleware, adminController.deleteCase)
 

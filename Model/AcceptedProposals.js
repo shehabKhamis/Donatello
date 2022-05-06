@@ -2,15 +2,25 @@ const Sequelize = require('sequelize')
 
 const sequelize = require('../connection/sequelize')
 
-const Case= sequelize.define('case',{
+const acceptedProposal= sequelize.define('acceptedProposal',{
 
-    CaseId :{
+    proposalId :{
         type : Sequelize.INTEGER.UNSIGNED,
         autoIncrement:true,
         allowNull : false,
         primaryKey : true,
         unique : true
     },
+    name : {
+        type : Sequelize.STRING,
+        allowNull : false
+
+    },
+    phoneNum : {
+        type : Sequelize.STRING(15),
+        allowNull : false
+    },
+
     title:{
         type : Sequelize.STRING,
         allowNull: false
@@ -24,44 +34,22 @@ const Case= sequelize.define('case',{
         allowNull:false,
         
     },
-    raised : {
-        type : Sequelize.INTEGER.UNSIGNED,
-        defaultValue : 0
-    },
-    toGo : {
-        type : Sequelize.INTEGER.UNSIGNED,
+    location :{
+        type : Sequelize.STRING,
         allowNull : false
 
     },
-    imageUrl : 
-    {
-        type : Sequelize.TEXT
-    },
-    level : 
-    {
-        type : Sequelize.STRING,
-        allowNull : false
-    },
-    distance : 
-    {
-        type : Sequelize.FLOAT.UNSIGNED,
-        allowNull : false
-    },
-    tags : 
-    {
-        type : Sequelize.JSON,
-        allowNull : false
-    },
+    
     category : 
     {
         type : Sequelize.STRING,
         allowNull : false
 
     },
-    userId : 
-    {
-        type: Sequelize.INTEGER,
-        defaultValue: null,
+    status : {
+        type : Sequelize.STRING,
+        allowNull : false,
+        defaultValue : "accepted"
 
     }
 
@@ -72,6 +60,6 @@ const Case= sequelize.define('case',{
 
 
 
-module.exports = Case;
+module.exports = acceptedProposal;
 
 

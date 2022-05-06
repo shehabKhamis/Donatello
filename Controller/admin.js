@@ -3,6 +3,10 @@ let Case = require('../Model/Case')
 
 let Proposal = require('../Model/Proposal')
 
+let acceptedProposal = require('../Model/AcceptedProposals')
+
+let rejectedProposal = require('../Model/RejectedProposals')
+
 
 module.exports.getOrgCases = (req, res, next) => {
 
@@ -54,6 +58,130 @@ module.exports.getOrgProposals = async (req, res, next) => {
 }
 }
 
+module.exports.acceptProposal=async (req,res,next)=>{
+    const propId = req.params.propId;
+    try
+    {
+        let found = await Proposal.findOne({where : {proposalId : propId,orgId : req.id}, attributes: { exclude: ['proposalId','createdAt','updatedAt'] } })
+       // console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee ---------> ",found.dataValues)
+        if(found)
+        {
+            found.status="accepted"
+            console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee   2222222 ---------> ",found.dataValues)
+            const acc = await acceptedProposal.create(found.dataValues)
+            if(acc)
+            {
+                const del = await Proposal.destroy({where : {proposalId:propId,orgId:req.id}})
+                if(del)
+                {
+                   const created =  await Case.create({
+                        title: req.body.title,
+                        description: req.body.description,
+                        goal: req.body.goal,
+                        imageUrl: req.body.imageUrl,
+                        toGo: req.body.goal,
+                        distance: req.body.distance,
+                        level: req.body.level,
+                        tags: req.body.tags,
+                        category: req.body.category,
+                        creator: req.id,
+                        userId : found.dataValues.submitter
+                
+                
+                    })
+                    if(created)
+                    {
+                        res.status(201).json({message : "proposal has been accepted."})
+                    }
+                    else
+                    {
+                        res.status(400).json({message : "proposal has been deleted and not added to cases."})
+                    }
+                   
+                }
+                else
+                {
+                    res.status(400).json({message : "proposal is accepted but duplicated."})
+                }
+            }
+            else
+            {
+                res.status(500).json({message : "error while accepting proposal."})
+            }
+        }
+        else{
+            res.status(404).json({message : "proposal is not found."})
+
+        }
+
+
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500;
+        }
+        next(err)
+    }
+}
+
+
+
+module.exports.rejectProposal=async (req,res,next)=>{
+    const propId = req.params.propId;
+    try
+    {
+        const found = await Proposal.findOne({where : {proposalId : propId,orgId : req.id}, attributes: { exclude: ['proposalId','createdAt','updatedAt'] } })
+        //console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee ---------> ",del)
+        if(found)
+        {
+            delete found.proposalId
+            found.status="rejected"
+            const acc = await rejectedProposal.create(found.dataValues)
+            if(acc)
+            {
+                const del = await Proposal.destroy({where : {proposalId:propId,orgId:req.id}})
+                if(del)
+                {
+                    res.status(201).json({message : "proposal has been rejected."})
+                }
+                else
+                {
+                    res.status(400).json({message : "proposal is rejected but duplicated."})
+                }
+            }
+            else
+            {
+                res.status(500).json({message : "error while rejecting proposal."})
+            }
+        }
+        else{
+            res.status(404).json({message : "proposal is not found."})
+
+        }
+
+
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500;
+        }
+        next(err)
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 module.exports.postCase = (req, res, next) => {
     console.log(req.id)
@@ -67,7 +195,8 @@ module.exports.postCase = (req, res, next) => {
         level: req.body.level,
         tags: req.body.tags,
         category: req.body.category,
-        creator: req.id
+        creator: req.id,
+        userId:null
 
 
     }).then(result => {

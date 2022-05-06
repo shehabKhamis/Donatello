@@ -9,6 +9,12 @@ const Case = require('./Model/Case')
 
 const Proposal = require('./Model/Proposal')
 
+const rejectedProposal = require('./Model/RejectedProposals')
+
+const acceptedProposal = require('./Model/AcceptedProposals')
+
+
+
 
 const Organization = require('./Model/Organization')
 
@@ -50,8 +56,14 @@ Organization.hasMany(Case,{constraints : true,onDelete :'CASCADE',foreignKey: 'c
 
 User.hasMany(Proposal,{constraints : true,onDelete :'CASCADE',foreignKey: 'submitter',allowNull:false})
 
+User.hasMany(acceptedProposal,{constraints : true,onDelete :'CASCADE',foreignKey: 'submitter',allowNull:false})
+
+User.hasMany(rejectedProposal,{constraints : true,onDelete :'CASCADE',foreignKey: 'submitter',allowNull:false})
+
 Proposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignKey: 'orgId',allowNull:false})
 
+acceptedProposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignKey: 'orgId',allowNull:false})
+rejectedProposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignKey: 'orgId',allowNull:false})
 
 sequalize.sync()
 .then(result=>{
