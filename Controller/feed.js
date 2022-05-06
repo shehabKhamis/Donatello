@@ -2,8 +2,9 @@
 let Case = require('../Model/Case');
 const Proposal = require('../Model/Proposal');
 const Organization = require('../Model/Organization');
+const User = require('../Model/User');
 
-
+const bcrypt = require('bcryptjs')
 
 module.exports.getCases=(req,res,next)=>
 {
@@ -140,3 +141,44 @@ module.exports.getOrganizations=(req,res,next)=>
     })
    
 }
+
+module.exports.changePassword = async (req, res, next) => {
+
+    try{ 
+        const pass = await User.findOne({where : {id : req.id},attributes:['password']})
+        const match = await bcrypt.compare(req.body.current,pass.password)
+        if(match)
+        {
+            const hashedPw= await bcrypt.hash(req.body.password,12)
+        const found = await User.update({
+
+        password:hashedPw
+        },{where : { id : req.id}});
+
+        if(found[0])
+        {
+
+            res.status(200).json({message : "password is successfully changed."})
+        }
+        else
+        {
+            res.status(400).json({message : "password cannot be changed."})
+        }
+        }
+        else
+        {
+            res.status(400).json({message : "current password is not correct."}) 
+        }
+       
+    }
+    catch(err){
+
+        if(!err.statusCode)
+        {
+            err.statusCode = 500;
+        }
+        next(err)
+
+    }
+}
+

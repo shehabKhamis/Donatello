@@ -3,9 +3,13 @@ let Case = require('../Model/Case')
 
 let Proposal = require('../Model/Proposal')
 
+const bcrypt = require('bcryptjs')
+
 let acceptedProposal = require('../Model/AcceptedProposals')
 
 let rejectedProposal = require('../Model/RejectedProposals')
+const Organization = require('../Model/Organization')
+
 
 
 module.exports.getOrgCases = (req, res, next) => {
@@ -407,6 +411,48 @@ module.exports.editCase = async (req, res, next) => {
         {
             res.status(400).json({message : "Case cannot be edited."})
         }
+    }
+    catch(err){
+
+        if(!err.statusCode)
+        {
+            err.statusCode = 500;
+        }
+        next(err)
+
+    }
+}
+
+
+
+module.exports.changePassword = async (req, res, next) => {
+
+    try{ 
+        const pass = await Organization.findOne({where : {orgId : req.id},attributes:['password']})
+        const match = await bcrypt.compare(req.body.current,pass.password)
+        if(match)
+        {
+            const hashedPw= await bcrypt.hash(req.body.password,12)
+        const found = await Organization.update({
+
+        password:hashedPw
+        },{where : { orgId : req.id}});
+
+        if(found[0])
+        {
+
+            res.status(200).json({message : "password is successfully changed."})
+        }
+        else
+        {
+            res.status(400).json({message : "password cannot be changed."})
+        }
+        }
+        else
+        {
+            res.status(400).json({message : "current password is not correct."}) 
+        }
+       
     }
     catch(err){
 

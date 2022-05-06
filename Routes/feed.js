@@ -10,7 +10,7 @@ const userAuth = require('../middleware/userAuth')
 
 router.get('/home',userAuth,feedController.getCases)
 
-
+router.patch('/changepassword',userAuth,feedController.changePassword)
 
 router.get('/home/:caseId',userAuth,feedController.getCase)
 

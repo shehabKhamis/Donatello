@@ -99,7 +99,17 @@ router.post('/login', orgAuthController.login)
 
 router.put('/edit/:caseId', orgAuthMiddleware, adminController.editCase)
 
+router.patch('/changepassword', orgAuthMiddleware,[body('password')
+.trim()
+.isStrongPassword({
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
 
+})
+.withMessage("Password must contain uppercase letter(s),lowercase letter(s),symbol(s) and be at least 8 characters long  ")
+], adminController.changePassword)
 
 module.exports = router;
 
