@@ -5,6 +5,7 @@ const acceptedProposal = require('../Model/AcceptedProposals');
 const rejectedProposal = require('../Model/RejectedProposals');
 const Organization = require('../Model/Organization');
 const User = require('../Model/User');
+const {validationResult}=require('express-validator')
 
 const bcrypt = require('bcryptjs')
 
@@ -207,6 +208,17 @@ module.exports.getOrganizations=(req,res,next)=>
 module.exports.changePassword = async (req, res, next) => {
 
     try{ 
+        const errors = validationResult(req)
+        if(!errors.isEmpty())
+        {
+            const error = new Error("Validation error")
+            error.statusCode =422
+            error.data = errors.array();
+            throw error
+    
+        }
+        else
+        {
         const pass = await User.findOne({where : {id : req.id},attributes:['password']})
         const match = await bcrypt.compare(req.body.current,pass.password)
         if(match)
@@ -231,6 +243,7 @@ module.exports.changePassword = async (req, res, next) => {
         {
             res.status(400).json({message : "current password is not correct."}) 
         }
+    }
        
     }
     catch(err){
@@ -242,5 +255,6 @@ module.exports.changePassword = async (req, res, next) => {
         next(err)
 
     }
+
 }
 
