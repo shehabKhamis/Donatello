@@ -1,6 +1,8 @@
 
 let Case = require('../Model/Case');
 const Proposal = require('../Model/Proposal');
+const acceptedProposal = require('../Model/AcceptedProposals');
+const rejectedProposal = require('../Model/RejectedProposals');
 const Organization = require('../Model/Organization');
 const User = require('../Model/User');
 
@@ -70,7 +72,43 @@ module.exports.getCase=(req,res,next)=>{
 
         })
 }
+module.exports.getProposals = async (req, res, next) => {
+    try{
+    let result = await Proposal.findAll({ where: { submitter: req.id } })
+    let acc= await acceptedProposal.findAll({ where: { submitter: req.id } })
+    let rej= await rejectedProposal.findAll({ where: { submitter: req.id } })
+    for(let pro of acc)
+    {
+        console.log(pro)
+        result.push(pro);
+    }
+    for(let pro of rej)
+    {
+        result.push(pro);
+    }
+    
+            if (!result.length ) {
 
+                const error = new Error('There are no proposals so far !');
+                error.statusCode = 404;
+                res.status(404).json({ message: error.message })
+            }
+            else {
+               
+                res.status(200).json({ proposal: result })
+            }
+
+      
+        }
+        catch(err){
+
+            if(!err.statusCode)
+            {
+                err.statusCode = 500;
+            }
+            next(err)
+}
+}
 
 
 module.exports.submitProposal=async (req,res,next)=>{
