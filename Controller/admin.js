@@ -126,12 +126,13 @@ module.exports.acceptProposal=async (req,res,next)=>{
     const propId = req.params.propId;
     try
     {
+        const orgName= await Organization.findOne({where:{orgId : req.id},attributes : ['name']})
         let found = await Proposal.findOne({where : {proposalId : propId,orgId : req.id}, attributes: { exclude: ['proposalId','createdAt','updatedAt'] } })
        // console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee ---------> ",found.dataValues)
         if(found)
         {
             found.status="accepted"
-            console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee   2222222 ---------> ",found.dataValues)
+            
             const acc = await acceptedProposal.create(found.dataValues)
             if(acc)
             {
@@ -140,6 +141,7 @@ module.exports.acceptProposal=async (req,res,next)=>{
                 {
                    const created =  await Case.create({
                         title: req.body.title,
+                        orgName : orgName.dataValues.name,
                         description: req.body.description,
                         goal: req.body.goal,
                         imageUrl: req.body.imageUrl,
@@ -247,11 +249,16 @@ module.exports.rejectProposal=async (req,res,next)=>{
 
 
 
-module.exports.postCase = (req, res, next) => {
+module.exports.postCase = async (req, res, next) => {
     console.log(req.id)
-    Case.create({
+
+    try
+    {const orgName= await Organization.findOne({where:{orgId : req.id},attributes : ['name']})
+    
+    const result =await Case.create({
         title: req.body.title,
         description: req.body.description,
+        orgName : orgName.dataValues.name,
         goal: req.body.goal,
         imageUrl: req.body.imageUrl,
         toGo: req.body.goal,
@@ -263,17 +270,19 @@ module.exports.postCase = (req, res, next) => {
         userId:null
 
 
-    }).then(result => {
+    })
+    if(result) {
         res.status(201).json({
             message: "Case is created successfully."
         });
-    })
-        .catch(err => {
+    }
+}        
+catch(err) {
             if (!err.statusCode) {
                 err.statusCode = 500;
             }
             next(err);
-        })
+        }
 
 }
 

@@ -72,6 +72,30 @@ module.exports.getCase=(req,res,next)=>{
 
         })
 }
+
+module.exports.getOrgCases = (req, res, next) => {
+
+    Case.findAll({ where: { creator: req.params.orgId } })
+        .then(result => {
+
+            if (!result.length) {
+
+                const error = new Error('There are no cases so far !');
+                error.statusCode = 404;
+                res.status(404).json({ message: error.message })
+            }
+            else {
+
+
+                res.status(200).json({ case: result })
+            }
+
+        })
+
+}
+
+
+
 module.exports.getProposals = async (req, res, next) => {
     try{
     let result = await Proposal.findAll({ where: { submitter: req.id } })
@@ -152,7 +176,7 @@ module.exports.submitProposal=async (req,res,next)=>{
 
 module.exports.getOrganizations=(req,res,next)=>
 {
-    Organization.findAll({attributes :['name','orgId']})
+    Organization.findAll({attributes :['name','orgId','category']})
     .then(result=>
         {
         if(!result.length)

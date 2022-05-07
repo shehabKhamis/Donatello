@@ -11,6 +11,10 @@ const Case= sequelize.define('case',{
         primaryKey : true,
         unique : true
     },
+    orgName:{
+        type : Sequelize.STRING,
+        allowNull: false
+    },
     title:{
         type : Sequelize.STRING,
         allowNull: false

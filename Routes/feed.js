@@ -14,6 +14,8 @@ router.patch('/changepassword',userAuth,feedController.changePassword)
 
 router.get('/home/:caseId',userAuth,feedController.getCase)
 
+router.get('/organizations/:orgId',userAuth,feedController.getOrgCases)
+
 router.get('/organizations',userAuth,feedController.getOrganizations)
 
 router.get('/proposals',userAuth,feedController.getProposals)
