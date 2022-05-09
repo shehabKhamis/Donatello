@@ -67,13 +67,13 @@ rejectedProposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',
 
 sequalize.sync()
 .then(result=>{
-    const server=app.listen(process.env.PORT || 3000,()=>{
+    const server=app.listen(process.env.PORT || 3000)
         console.log("working")
         const io = require('./socket').init(server);
         io.on('connection',socket=>{
             console.log("new connection")
-        })
+        });
     })
-}).catch(err=>{
+.catch(err=>{
     console.log(err);
 })

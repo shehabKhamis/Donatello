@@ -274,7 +274,7 @@ module.exports.postCase = async (req, res, next) => {
 
     })
     if(result) {
-        io.getIo('creation',{action : 'caseCreation',case :result}) 
+        io.getIo().emit('creation',{action : 'caseCreation',case :result}) 
 
         res.status(201).json({
             message: "Case is created successfully."
