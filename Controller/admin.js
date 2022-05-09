@@ -1,6 +1,8 @@
 
 let Case = require('../Model/Case')
 
+const io = require('../socket')
+
 let Proposal = require('../Model/Proposal')
 
 const bcrypt = require('bcryptjs')
@@ -272,6 +274,8 @@ module.exports.postCase = async (req, res, next) => {
 
     })
     if(result) {
+        io.getIo('creation',{action : 'caseCreation',case :result}) 
+
         res.status(201).json({
             message: "Case is created successfully."
         });
