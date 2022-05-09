@@ -22,7 +22,8 @@ const userRoutes = require('./Routes/feed.js')
 
 const authRoutes = require('./Routes/auth')
 
-const orgRoutes = require('./Routes/org')
+const orgRoutes = require('./Routes/org');
+const socket = require('./socket');
 
 const app=express();
 
@@ -71,8 +72,13 @@ sequalize.sync()
         console.log("working")
         const io = require('./socket').init(server);
         io.on('connection',socket=>{
-            console.log("new connection")
+            console.log("new connection",socket)
+            socket.on('set-name',(name)=>{
+            console.log('bushi name : ',name);
+            })
         });
+
+        
     })
 .catch(err=>{
     console.log(err);
