@@ -136,12 +136,7 @@ module.exports.acceptProposal=async (req,res,next)=>{
         {
             found.status="accepted"
             
-            const acc = await acceptedProposal.create(found.dataValues)
-            if(acc)
-            {
-                const del = await Proposal.destroy({where : {proposalId:propId,orgId:req.id}})
-                if(del)
-                {
+            
                    const created =  await Case.create({
                         title: req.body.title,
                         orgName : orgName.dataValues.name,
@@ -160,23 +155,35 @@ module.exports.acceptProposal=async (req,res,next)=>{
                     })
                     if(created)
                     {
-                        res.status(201).json({message : "proposal has been accepted."})
+                        const acc = await acceptedProposal.create(found.dataValues)
+                        if(acc)
+                        {
+                            const del = await Proposal.destroy({where : {proposalId:propId,orgId:req.id}})
+                            if(del)
+                            {
+                                io.getIo().emit('cases',{action : 'proposalAccepted',case :created}) 
+                                res.status(201).json({message : "proposal has been accepted."})
+                            }
+                            else{
+                                res.status(400).json({message : "error while deleting proposal."})
+                            }
+                            
+                        }
+         else
+            {
+                res.status(500).json({message : "error while accepting proposal."})
+            }
+                        
                     }
                     else
                     {
                         res.status(400).json({message : "proposal has been deleted and not added to cases."})
                     }
                    
-                }
-                else
-                {
-                    res.status(400).json({message : "proposal is accepted but duplicated."})
-                }
-            }
-            else
-            {
-                res.status(500).json({message : "error while accepting proposal."})
-            }
+                
+                
+            
+            
         }
         else{
             res.status(404).json({message : "proposal is not found."})
@@ -213,6 +220,7 @@ module.exports.rejectProposal=async (req,res,next)=>{
                 const del = await Proposal.destroy({where : {proposalId:propId,orgId:req.id}})
                 if(del)
                 {
+                    io.getIo().emit('proposalDeletion',{action : 'proposalAccepted',proposalId :propId}) 
                     res.status(201).json({message : "proposal has been rejected."})
                 }
                 else

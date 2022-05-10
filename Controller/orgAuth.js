@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 
 const Organization = require('../Model/Organization')
 
-
+const io = require('../socket')
 const Case = require('../Model/Case')
 
 const jwt = require('jsonwebtoken')
@@ -33,7 +33,7 @@ module.exports.signup=(req,res,next)=>
     
             },"SayedRagabMahmoudHemedaOrganizationToken",{expiresIn:'1h'})
     
-
+            io.getIo().emit("orgReg",{org : org})
             res.status(201).json({token : token,id : org.orgId,name : org.name,email : org.email})
 
         })
