@@ -161,7 +161,7 @@ module.exports.acceptProposal=async (req,res,next)=>{
                             const del = await Proposal.destroy({where : {proposalId:propId,orgId:req.id}})
                             if(del)
                             {
-                                io.getIo().emit('cases',{action : 'proposalAccepted',case :created}) 
+                                io.getIo().emit('proposal',{action : 'proposalAccepted',case :created}) 
                                 res.status(201).json({message : "proposal has been accepted."})
                             }
                             else{
@@ -220,7 +220,7 @@ module.exports.rejectProposal=async (req,res,next)=>{
                 const del = await Proposal.destroy({where : {proposalId:propId,orgId:req.id}})
                 if(del)
                 {
-                    io.getIo().emit('proposalDeletion',{action : 'proposalAccepted',proposalId :propId}) 
+                    io.getIo().emit('proposal',{action : 'proposalRejected',proposalId :propId}) 
                     res.status(201).json({message : "proposal has been rejected."})
                 }
                 else
