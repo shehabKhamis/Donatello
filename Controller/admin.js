@@ -387,7 +387,7 @@ module.exports.deleteCase = (req, res, next) => {
         .then(check => {
             console.log(check)
             if (check) {
-                io.getIo().emit("caseDeletion",{caseId : caseId})
+                io.getIo().emit("cases",{action : "caseDeletion",caseId : caseId})
                 res.status(202).json({ message: "deleted successfully." })
             }
             else {
