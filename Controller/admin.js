@@ -11,6 +11,7 @@ let acceptedProposal = require('../Model/AcceptedProposals')
 
 let rejectedProposal = require('../Model/RejectedProposals')
 const Organization = require('../Model/Organization')
+const socket = require('../socket')
 
 
 
@@ -274,7 +275,7 @@ module.exports.postCase = async (req, res, next) => {
 
     })
     if(result) {
-        io.getIo().emit('creation',{action : 'caseCreation',case :result}) 
+        io.getIo().emit('cases',{action : 'caseCreation',case :result}) 
 
         res.status(201).json({
             message: "Case is created successfully."
@@ -378,6 +379,7 @@ module.exports.deleteCase = (req, res, next) => {
         .then(check => {
             console.log(check)
             if (check) {
+                io.getIo().emit("caseDeletion",{caseId : caseId})
                 res.status(202).json({ message: "deleted successfully." })
             }
             else {
@@ -414,9 +416,11 @@ module.exports.editCase = async (req, res, next) => {
         category: req.body.category,
         creator: req.id
         },{where : {CaseId : caseId , creator : req.id}});
-
-        if(found[0])
+        const updatedCase = await Case.findByPk(caseId)
+        if(found[0]&& updatedCase)
         {
+            
+            io.getIo().emit("cases",{action:"caseUpdating",case : updatedCase})
 
             res.status(200).json({message : "Case is successfully edited."})
         }
