@@ -158,6 +158,7 @@ module.exports.submitProposal=async (req,res,next)=>{
     })
     if(created)
     {
+        io.getIo().emit('proposals',{action : 'proposalSent',proposal :created}) 
         res.json({message : "proposal is sent successfully."})
     }
 

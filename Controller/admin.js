@@ -129,11 +129,14 @@ module.exports.acceptProposal=async (req,res,next)=>{
     const propId = req.params.propId;
     try
     {
+        
         const orgName= await Organization.findOne({where:{orgId : req.id},attributes : ['name']})
         let found = await Proposal.findOne({where : {proposalId : propId,orgId : req.id}, attributes: { exclude: ['proposalId','createdAt','updatedAt'] } })
+        
        // console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee ---------> ",found.dataValues)
         if(found)
         {
+            delete found.proposalId
             found.status="accepted"
             
             
@@ -161,7 +164,7 @@ module.exports.acceptProposal=async (req,res,next)=>{
                             const del = await Proposal.destroy({where : {proposalId:propId,orgId:req.id}})
                             if(del)
                             {
-                                io.getIo().emit('proposal',{action : 'proposalAccepted',case :created}) 
+                                io.getIo().emit('proposals',{action : 'proposalAccepted',propId : propId,case :created,proposal:acc}) 
                                 res.status(201).json({message : "proposal has been accepted."})
                             }
                             else{
@@ -220,7 +223,7 @@ module.exports.rejectProposal=async (req,res,next)=>{
                 const del = await Proposal.destroy({where : {proposalId:propId,orgId:req.id}})
                 if(del)
                 {
-                    io.getIo().emit('proposal',{action : 'proposalRejected',proposalId :propId}) 
+                    io.getIo().emit('proposals',{action : 'proposalRejected',propId :propId,proposal :acc}) 
                     res.status(201).json({message : "proposal has been rejected."})
                 }
                 else
