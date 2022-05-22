@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 
 const sequelize = require('../connection/sequelize')
 
-const donationReq= sequelize.define('donationReq',{
+const Donation= sequelize.define('donation',{
 
     donationId :{
         type : Sequelize.INTEGER.UNSIGNED,
@@ -31,7 +31,7 @@ const donationReq= sequelize.define('donationReq',{
     status : {
         type : Sequelize.STRING,
         allowNull : false,
-        defaultValue : "pending"
+        defaultValue : "Done"
 
     }
 
@@ -42,6 +42,6 @@ const donationReq= sequelize.define('donationReq',{
 
 
 
-module.exports = donationReq;
+module.exports = Donation;
 
 

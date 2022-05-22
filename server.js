@@ -6,6 +6,8 @@ const sequalize=require('./connection/sequelize')
 const User = require('./Model/User')
 const donationReq = require('./Model/DonationReq');
 
+const Donation = require('./Model/Donation');
+
 const Case = require('./Model/Case')
 
 const Proposal = require('./Model/Proposal')
@@ -25,6 +27,7 @@ const authRoutes = require('./Routes/auth')
 
 const orgRoutes = require('./Routes/org');
 const socket = require('./socket');
+
 
 const app=express();
 
@@ -62,6 +65,13 @@ Case.hasMany(donationReq,{constraints : true,onDelete :'SET NULL',foreignKey: 'c
 
 User.hasMany(donationReq,{constraints : true,onDelete :'SET NULL',foreignKey: 'donorId',allowNull:false})
 
+Organization.hasMany(Donation,{constraints : true,onDelete :'SET NULL',foreignKey: 'orgId',allowNull:false});
+
+Case.hasMany(Donation,{constraints : true,onDelete :'SET NULL',foreignKey: 'caseId',allowNull:false});
+
+User.hasMany(Donation,{constraints : true,onDelete :'SET NULL',foreignKey: 'donorId',allowNull:false})
+
+
 User.hasMany(Proposal,{constraints : true,onDelete :'CASCADE',foreignKey: 'submitter',allowNull:false})
 
 User.hasMany(acceptedProposal,{constraints : true,onDelete :'CASCADE',foreignKey: 'submitter',allowNull:false})
@@ -73,7 +83,7 @@ Proposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignK
 acceptedProposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignKey: 'orgId',allowNull:false})
 rejectedProposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignKey: 'orgId',allowNull:false})
 
-sequalize.sync()
+sequalize.sync({force : true})
 .then(result=>{
     const server=app.listen(process.env.PORT || 3000)
         console.log("working")

@@ -1,6 +1,10 @@
 
 let Case = require('../Model/Case')
 const donationReq = require('../Model/DonationReq');
+
+const Donation = require('../Model/Donation');
+
+
 const io = require('../socket')
 
 const User = require('../Model/User')
@@ -525,4 +529,76 @@ module.exports.getOrgDonations = async (req, res, next) => {
             }
             next(err)
 }
+}
+
+
+module.exports.donationDone=async (req,res,next)=>{
+
+    const donId = req.params.donId;
+    try
+    {
+        const fou = await donationReq.findOne({where : {donationId : donId,orgId : req.id}, attributes: { exclude: ['donationId','createdAt','updatedAt','status'] } })
+        //console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee ---------> ",del)
+        if(fou)
+        {
+            delete fou.donationId;
+            delete fou.status;
+            const amount = fou.amount;
+            const caseId = fou.caseId
+        
+            const acc = await Donation.create(fou.dataValues)
+            if(acc)
+            {
+                const del = await donationReq.destroy({where : {donationId:donId,orgId:req.id}})
+                if(del)
+                {
+                    const old = await Case.findOne({where : {CaseId : caseId,orgId : req.id}, attributes:['raised','toGo']})
+                    
+                    if(old)
+                    {
+                        const found = await Case.update({
+
+                            raised : old.dataValues.raised + amount,
+                            toGo : old.dataValues.toGo - amount,
+                            creator: req.id
+                            },{where : {CaseId : acc.caseId , creator : req.id}});
+                        
+                        
+                        if(found)
+                        {
+                            io.getIo().emit('donations',{action : 'donationDone',donation :acc})
+                            res.status(201).json({message : "Donation has been recieved."})
+                        }
+
+                    }
+                  
+                }
+                else
+                {
+                    res.status(400).json({message : "duplicated."})
+                }
+            }
+            else
+            {
+                res.status(500).json({message : "error while recieving donation."})
+            }
+        }
+        else{
+            res.status(404).json({message : "donation is not found is not found."})
+
+        }
+
+
+    }
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500;
+        }
+        next(err)
+    }
+
+
+
 }
