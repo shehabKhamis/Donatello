@@ -1,7 +1,9 @@
 
 let Case = require('../Model/Case')
-
+const donationReq = require('../Model/DonationReq');
 const io = require('../socket')
+
+const User = require('../Model/User')
 
 let Proposal = require('../Model/Proposal')
 
@@ -12,6 +14,7 @@ let acceptedProposal = require('../Model/AcceptedProposals')
 let rejectedProposal = require('../Model/RejectedProposals')
 const Organization = require('../Model/Organization')
 const socket = require('../socket')
+
 
 
 
@@ -491,4 +494,35 @@ module.exports.changePassword = async (req, res, next) => {
         next(err)
 
     }
+}
+
+
+
+module.exports.getOrgDonations = async (req, res, next) => {
+    try{
+    let result = await donationReq.findAll({ where: { orgId: req.id } , attributes :['donorName','amount','phoneNum','donorAddress']})
+        
+
+            if (!result.length) {
+
+                const error = new Error('There are no donations so far !');
+                error.statusCode = 404;
+                res.status(404).json({ message: error.message })
+            }
+            else {
+
+
+                res.status(200).json({ donations: result })
+            }
+
+      
+        }
+        catch(err){
+
+            if(!err.statusCode)
+            {
+                err.statusCode = 500;
+            }
+            next(err)
+}
 }

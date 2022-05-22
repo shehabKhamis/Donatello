@@ -1,12 +1,13 @@
 
 let Case = require('../Model/Case');
 const Proposal = require('../Model/Proposal');
+const donationReq = require('../Model/DonationReq');
 const acceptedProposal = require('../Model/AcceptedProposals');
 const rejectedProposal = require('../Model/RejectedProposals');
 const Organization = require('../Model/Organization');
 const User = require('../Model/User');
 const {validationResult}=require('express-validator')
-
+const io = require('../socket')
 const bcrypt = require('bcryptjs')
 
 module.exports.getCases=(req,res,next)=>
@@ -256,6 +257,61 @@ module.exports.changePassword = async (req, res, next) => {
         next(err)
 
     }
+
+}
+
+module.exports.donate=async (req,res,next)=>{
+
+    try{
+        const caseId = req.params.caseId
+    const found = await Case.findOne({where:{CaseId : caseId}})
+    if(!found)
+    {
+        const err = new Error("there is no case with this Id.")
+        throw err;
+    }
+    if(req.body.amount >= 100 && req.body.amount <= found.toGo)
+    {
+        const name = await User.findOne({where :{id : req.id},attributes:['name']})
+        if(name)
+        {
+            console.log(name)
+            const created = await donationReq.create({
+                amount : req.body.amount,
+                phoneNum :req.body.phoneNumber,
+                orgId : req.body.org,
+                donorId : req.id,
+                donorName : name.dataValues.name,
+                donorAddress : req.body.address,
+                caseId: caseId
+            })
+            if(created)
+            {
+                io.getIo().emit('donations',{action : 'donationRequest',donationRequest :created}) 
+                res.json({message : "your donation request has been submitted, you will be contacted in 2 days."})
+            }
+        }
+       
+    }
+    else
+    {
+        res.json({message :"Entered amount is less than 100 EGP or greater than the needed amount!"})
+        throw errorr;
+
+    }
+    
+
+    }
+
+    catch(err)
+    {
+        if(!err.statusCode)
+        {
+            err.statusCode = 500;
+        }
+        next(err)
+    }
+
 
 }
 

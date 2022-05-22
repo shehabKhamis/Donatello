@@ -4,6 +4,7 @@ const express = require('express');
 const sequalize=require('./connection/sequelize')
 
 const User = require('./Model/User')
+const donationReq = require('./Model/DonationReq');
 
 const Case = require('./Model/Case')
 
@@ -54,6 +55,12 @@ app.use((error,req,res,next)=>
 })
 
 Organization.hasMany(Case,{constraints : true,onDelete :'CASCADE',foreignKey: 'creator',allowNull:false});
+
+Organization.hasMany(donationReq,{constraints : true,onDelete :'SET NULL',foreignKey: 'orgId',allowNull:false});
+
+Case.hasMany(donationReq,{constraints : true,onDelete :'SET NULL',foreignKey: 'caseId',allowNull:false});
+
+User.hasMany(donationReq,{constraints : true,onDelete :'SET NULL',foreignKey: 'donorId',allowNull:false})
 
 User.hasMany(Proposal,{constraints : true,onDelete :'CASCADE',foreignKey: 'submitter',allowNull:false})
 
