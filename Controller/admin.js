@@ -504,7 +504,7 @@ module.exports.changePassword = async (req, res, next) => {
 
 module.exports.getOrgDonations = async (req, res, next) => {
     try{
-    let result = await donationReq.findAll({ where: { orgId: req.id } , attributes :['donationId','donorName','amount','phoneNum','donorAddress']})
+    let result = await donationReq.findAll({ where: { orgId: req.id } , attributes :['donationId','donorName','amount','phoneNum','donorAddress','title','description']})
         
 
             if (!result.length) {

@@ -27,6 +27,17 @@ const donationReq= sequelize.define('donationReq',{
     donorAddress : {
         type : Sequelize.STRING,
         allowNull : false
+    },orgName:{
+        type : Sequelize.STRING,
+        allowNull: false
+    },
+    title:{
+        type : Sequelize.STRING,
+        allowNull: false
+    },
+    description : {
+        type : Sequelize.STRING,
+        allowNull:false
     },
     status : {
         type : Sequelize.STRING,

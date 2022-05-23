@@ -282,6 +282,9 @@ module.exports.donate=async (req,res,next)=>{
                 phoneNum :req.body.phoneNumber,
                 orgId : req.body.org,
                 donorId : req.id,
+                title : found.title,
+                orgName : found.orgName,
+                description : found.description,
                 donorName : name.dataValues.name,
                 donorAddress : req.body.address,
                 caseId: caseId
@@ -319,7 +322,15 @@ module.exports.donate=async (req,res,next)=>{
 module.exports.getDonations = async (req, res, next) => {
     try{
     let result = await Donation.findAll({ where: { donorId: req.id }})
+    let caseDetails = await Case.findOne({where : {CaseId : result.caseId }})
     let acc= await donationReq.findAll({ where: { donorId: req.id } })
+    let caseReqDetails = await Case.findOne({where : {CaseId : acc.caseId }})
+    result.orgName = caseDetails.orgName;
+    result.caseTitle = caseDetails.title;
+    result.description=caseDetails.description;
+    acc.orgName = caseReqDetails.orgName;
+    acc.caseTitle = caseReqDetails.title;
+    acc.description=caseReqDetails.description;
     for(let pro of acc)
     {
         console.log(pro)

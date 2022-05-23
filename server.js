@@ -83,7 +83,7 @@ Proposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignK
 acceptedProposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignKey: 'orgId',allowNull:false})
 rejectedProposal.belongsTo(Organization,{constraints : true,onDelete :'CASCADE',foreignKey: 'orgId',allowNull:false})
 
-sequalize.sync()
+sequalize.sync({force : true})
 .then(result=>{
     const server=app.listen(process.env.PORT || 3000)
         console.log("working")
