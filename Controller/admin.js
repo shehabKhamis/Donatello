@@ -552,7 +552,7 @@ module.exports.donationDone=async (req,res,next)=>{
                 const del = await donationReq.destroy({where : {donationId:donId,orgId:req.id}})
                 if(del)
                 {
-                    const old = await Case.findOne({where : {CaseId : caseId,orgId : req.id}, attributes:['raised','toGo']})
+                    const old = await Case.findOne({where : {CaseId : caseId,creator : req.id}, attributes:['raised','toGo']})
                     
                     if(old)
                     {
@@ -601,4 +601,34 @@ module.exports.donationDone=async (req,res,next)=>{
 
 
 
+}
+
+
+module.exports.getDoneDonations = async (req, res, next) => {
+    try{
+    let result = await Donation.findAll({ where: { orgId: req.id }})
+        
+
+            if (!result.length) {
+
+                const error = new Error('There are no donations so far !');
+                error.statusCode = 404;
+                res.status(404).json({ message: error.message })
+            }
+            else {
+
+
+                res.status(200).json({ donations: result })
+            }
+
+      
+        }
+        catch(err){
+
+            if(!err.statusCode)
+            {
+                err.statusCode = 500;
+            }
+            next(err)
+}
 }

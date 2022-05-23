@@ -22,7 +22,11 @@ router.get('/proposals', orgAuthMiddleware, adminController.getOrgProposals)
 
 router.get('/donations', orgAuthMiddleware, adminController.getOrgDonations)
 
-router.put('/donations/done/donId', orgAuthMiddleware, adminController.donationDone)
+router.put('/donations/done/:donId', orgAuthMiddleware, adminController.donationDone)
+
+router.get('/donations/done', orgAuthMiddleware, adminController.getDoneDonations)
+
+
 
 router.get('/proposals/accepted', orgAuthMiddleware, adminController.getOrgAcceptedProposals)
 
