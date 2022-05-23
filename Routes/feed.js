@@ -27,7 +27,7 @@ router.get('/home/:caseId',userAuth,feedController.getCase)
 
 router.post('/donationrequest/:caseId',userAuth,feedController.donate)
 
-//router.get('/donations',userAuth,feedController.getDonations)
+router.get('/donations',userAuth,feedController.getDonations)
 
 router.get('/organizations/:orgId',userAuth,feedController.getOrgCases)
 

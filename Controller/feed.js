@@ -2,6 +2,7 @@
 let Case = require('../Model/Case');
 const Proposal = require('../Model/Proposal');
 const donationReq = require('../Model/DonationReq');
+const Donation = require('../Model/Donation');
 const acceptedProposal = require('../Model/AcceptedProposals');
 const rejectedProposal = require('../Model/RejectedProposals');
 const Organization = require('../Model/Organization');
@@ -314,4 +315,39 @@ module.exports.donate=async (req,res,next)=>{
 
 
 }
+
+module.exports.getDonations = async (req, res, next) => {
+    try{
+    let result = await Donation.findAll({ where: { donorId: req.id }})
+    let acc= await donationReq.findAll({ where: { donorId: req.id } })
+    for(let pro of acc)
+    {
+        console.log(pro)
+        result.push(pro);
+    }    
+
+            if (!result.length) {
+
+                const error = new Error('There are no donations so far !');
+                error.statusCode = 404;
+                res.status(404).json({ message: error.message })
+            }
+            else {
+
+
+                res.status(200).json({ donations: result })
+            }
+
+      
+        }
+        catch(err){
+
+            if(!err.statusCode)
+            {
+                err.statusCode = 500;
+            }
+            next(err)
+}
+}
+
 
