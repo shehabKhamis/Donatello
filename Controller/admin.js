@@ -545,6 +545,7 @@ module.exports.donationDone=async (req,res,next)=>{
             delete fou.status;
             const amount = fou.amount;
             const caseId = fou.caseId
+            
         
             const acc = await Donation.create(fou.dataValues)
             if(acc)
@@ -566,7 +567,7 @@ module.exports.donationDone=async (req,res,next)=>{
                         
                         if(found)
                         {
-                            io.getIo().emit('donations',{action : 'donationDone',donation :acc})
+                            io.getIo().emit('donations',{action : 'donationDone',donId:donId,donation :acc})
                             res.status(201).json({message : "Donation has been recieved."})
                         }
 
