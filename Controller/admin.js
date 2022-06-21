@@ -564,10 +564,10 @@ module.exports.donationDone=async (req,res,next)=>{
                             creator: req.id
                             },{where : {CaseId : acc.caseId , creator : req.id}});
                         
-                        
-                        if(found)
+                        const updatedCase = await Case.findByPk(caseId)
+                        if(found && updatedCase)
                         {
-                            io.getIo().emit('donations',{action : 'donationDone',donId:donId,donation :acc})
+                            io.getIo().emit('donations',{action : 'donationDone',case:updatedCase,donId:donId,donation :acc})
                             res.status(201).json({message : "Donation has been recieved."})
                         }
 
