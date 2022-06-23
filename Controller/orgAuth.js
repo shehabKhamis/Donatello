@@ -32,9 +32,16 @@ module.exports.signup=(req,res,next)=>
                 id : org.orgId
     
             },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'1h'})
+
+        const refreshToken = jwt.sign({
+            name : org.name,
+            email : org.email,
+            id : org.orgId
+
+        },process.env.ADMIN_REFRESH_TOKEN,{expiresIn:'1y'})
     
             io.getIo().emit("orgReg",{org : org})
-            res.status(201).json({token : token,id : org.orgId,name : org.name,email : org.email})
+            res.status(201).json({token : token,refreshToken:refreshToken,id : org.orgId,name : org.name,email : org.email})
 
         })
         .catch(err=>{
@@ -86,8 +93,14 @@ module.exports.login=(req,res,next)=>{
             id : loadedOrg.orgId
 
         },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'1h'})
+        const refreshToken = jwt.sign({
+            name : loadedOrg.name,
+            email : loadedOrg.email,
+            id : loadedOrg.orgId
 
-        res.status(200).json({token : token,id : loadedOrg.orgId,name : loadedOrg.name,email : loadedOrg.email})
+        },process.env.ADMIN_REFRESH_TOKEN,{expiresIn:'1y'})
+
+        res.status(200).json({token : token,refreshToken:refreshToken,id : loadedOrg.orgId,name : loadedOrg.name,email : loadedOrg.email})
 
 
     })

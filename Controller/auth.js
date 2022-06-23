@@ -30,9 +30,15 @@ module.exports.signup=(req,res,next)=>
                 id : user.id
     
             },process.env.USER_ACCESS_TOKEN,{expiresIn:'1h'})
+            const refreshToken = jwt.sign({
+                //name : user.name,
+                email : user.email,
+                id : user.orgId
+    
+            },process.env.USER_REFRESH_TOKEN,{expiresIn:'1y'})
     
 
-            res.status(201).json({token : token,id : user.id,name : user.name,email:user.email})
+            res.status(201).json({token : token,refreshToken:refreshToken,id : user.id,name : user.name,email:user.email})
 
         })
         .catch(err=>{
@@ -83,8 +89,14 @@ module.exports.login=(req,res,next)=>{
             id : loadedUser.id
 
         },process.env.USER_ACCESS_TOKEN,{expiresIn:'1h'})
+        const refreshToken = jwt.sign({
+           
+            email : loadedUser.email,
+            id : loadedUser.orgId
 
-        res.status(200).json({token : token,id : loadedUser.id,name : loadedUser.name,email:loadedUser.email})
+        },process.env.USER_REFRESH_TOKEN,{expiresIn:'1y'})
+
+        res.status(200).json({token : token,refreshToken:refreshToken ,id : loadedUser.id,name : loadedUser.name,email:loadedUser.email})
 
 
     })

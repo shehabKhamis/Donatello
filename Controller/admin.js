@@ -45,6 +45,7 @@ module.exports.getOrgCases = (req, res, next) => {
 
 module.exports.getOrgProposals = async (req, res, next) => {
     try{
+        
     let result = await Proposal.findAll({ where: { orgId: req.id } })
         
 
