@@ -1,5 +1,5 @@
 const {validationResult}=require('express-validator')
-
+require('dotenv').config();
 const bcrypt = require('bcryptjs')
 
 const Organization = require('../Model/Organization')
@@ -31,7 +31,7 @@ module.exports.signup=(req,res,next)=>
                 email : org.email,
                 id : org.orgId
     
-            },"SayedRagabMahmoudHemedaOrganizationToken",{expiresIn:'1h'})
+            },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'1h'})
     
             io.getIo().emit("orgReg",{org : org})
             res.status(201).json({token : token,id : org.orgId,name : org.name,email : org.email})
@@ -85,7 +85,7 @@ module.exports.login=(req,res,next)=>{
             email : loadedOrg.email,
             id : loadedOrg.orgId
 
-        },"SayedRagabMahmoudHemedaOrganizationToken",{expiresIn:'1h'})
+        },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'1h'})
 
         res.status(200).json({token : token,id : loadedOrg.orgId,name : loadedOrg.name,email : loadedOrg.email})
 

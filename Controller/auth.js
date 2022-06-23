@@ -1,4 +1,4 @@
-
+require('dotenv').config();
 const {validationResult}=require('express-validator')
 
 const bcrypt = require('bcryptjs')
@@ -29,7 +29,7 @@ module.exports.signup=(req,res,next)=>
                 email : user.email,
                 id : user.id
     
-            },"SayedRagabMahmoudHemedaToken",{expiresIn:'1h'})
+            },process.env.USER_ACCESS_TOKEN,{expiresIn:'1h'})
     
 
             res.status(201).json({token : token,id : user.id,name : user.name,email:user.email})
@@ -82,7 +82,7 @@ module.exports.login=(req,res,next)=>{
             email : loadedUser.email,
             id : loadedUser.id
 
-        },"SayedRagabMahmoudHemedaToken",{expiresIn:'1h'})
+        },process.env.USER_ACCESS_TOKEN,{expiresIn:'1h'})
 
         res.status(200).json({token : token,id : loadedUser.id,name : loadedUser.name,email:loadedUser.email})
 
