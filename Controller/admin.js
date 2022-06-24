@@ -24,6 +24,10 @@ const socket = require('../socket')
 
 module.exports.getOrgCases = (req, res, next) => {
 
+   
+        console.log("ya 3aaaaaaaaaaaaaaaaaaaaaammmaememanan",req.token)
+        console.log("ya 3aaaaaaaaaaaaaaaaaaaaaammmaememanan EL IDD",req.id)
+    
     Case.findAll({ where: { creator: req.id } })
         .then(result => {
 
@@ -31,12 +35,12 @@ module.exports.getOrgCases = (req, res, next) => {
 
                 const error = new Error('There are no cases so far !');
                 error.statusCode = 404;
-                res.status(404).json({ message: error.message })
+                res.status(404).json({ message: error.message,token : req.token,refToken : req.refreshToken })
             }
             else {
 
 
-                res.status(200).json({ case: result })
+                res.status(200).json({ case: result ,token : req.token,refToken : req.refreshToken })
             }
 
         })
@@ -53,12 +57,12 @@ module.exports.getOrgProposals = async (req, res, next) => {
 
                 const error = new Error('There are no proposals so far !');
                 error.statusCode = 404;
-                res.status(404).json({ message: error.message })
+                res.status(404).json({ message: error.message,token : req.token,refToken : req.refreshToken })
             }
             else {
 
 
-                res.status(200).json({ proposal: result })
+                res.status(200).json({ proposal: result,token : req.token,refToken : req.refreshToken })
             }
 
       
@@ -82,12 +86,12 @@ module.exports.getOrgAcceptedProposals = async (req, res, next) => {
 
                 const error = new Error('There are no accepted proposals so far !');
                 error.statusCode = 404;
-                res.status(404).json({ message: error.message })
+                res.status(404).json({ message: error.message,token : req.token,refToken : req.refreshToken  })
             }
             else {
 
 
-                res.status(200).json({ proposal: result })
+                res.status(200).json({ proposal: result,token : req.token,refToken : req.refreshToken  })
             }
 
       
@@ -113,12 +117,12 @@ module.exports.getOrgRejectedProposals = async (req, res, next) => {
 
                 const error = new Error('There are no rejected proposals so far !');
                 error.statusCode = 404;
-                res.status(404).json({ message: error.message })
+                res.status(404).json({ message: error.message,token : req.token,refToken : req.refreshToken  })
             }
             else {
 
 
-                res.status(200).json({ proposal: result })
+                res.status(200).json({ proposal: result,token : req.token,refToken : req.refreshToken  })
             }
 
       
@@ -173,22 +177,22 @@ module.exports.acceptProposal=async (req,res,next)=>{
                             if(del)
                             {
                                 io.getIo().emit('proposals',{action : 'proposalAccepted',propId : propId,case :created,proposal:acc}) 
-                                res.status(201).json({message : "proposal has been accepted."})
+                                res.status(201).json({message : "proposal has been accepted.",token : req.token,refToken : req.refreshToken })
                             }
                             else{
-                                res.status(400).json({message : "error while deleting proposal."})
+                                res.status(400).json({message : "error while deleting proposal.",token : req.token,refToken : req.refreshToken })
                             }
                             
                         }
          else
             {
-                res.status(500).json({message : "error while accepting proposal."})
+                res.status(500).json({message : "error while accepting proposal.",token : req.token,refToken : req.refreshToken })
             }
                         
                     }
                     else
                     {
-                        res.status(400).json({message : "proposal has been deleted and not added to cases."})
+                        res.status(400).json({message : "proposal has been deleted and not added to cases.",token : req.token,refToken : req.refreshToken })
                     }
                    
                 
@@ -197,7 +201,7 @@ module.exports.acceptProposal=async (req,res,next)=>{
             
         }
         else{
-            res.status(404).json({message : "proposal is not found."})
+            res.status(404).json({message : "proposal is not found.",token : req.token,refToken : req.refreshToken })
 
         }
 
@@ -232,20 +236,20 @@ module.exports.rejectProposal=async (req,res,next)=>{
                 if(del)
                 {
                     io.getIo().emit('proposals',{action : 'proposalRejected',propId :propId,proposal :acc}) 
-                    res.status(201).json({message : "proposal has been rejected."})
+                    res.status(201).json({message : "proposal has been rejected.",token : req.token,refToken : req.refreshToken })
                 }
                 else
                 {
-                    res.status(400).json({message : "proposal is rejected but duplicated."})
+                    res.status(400).json({message : "proposal is rejected but duplicated.",token : req.token,refToken : req.refreshToken })
                 }
             }
             else
             {
-                res.status(500).json({message : "error while rejecting proposal."})
+                res.status(500).json({message : "error while rejecting proposal.",token : req.token,refToken : req.refreshToken })
             }
         }
         else{
-            res.status(404).json({message : "proposal is not found."})
+            res.status(404).json({message : "proposal is not found.",token : req.token,refToken : req.refreshToken })
 
         }
 
@@ -297,7 +301,7 @@ module.exports.postCase = async (req, res, next) => {
         io.getIo().emit('cases',{action : 'caseCreation',case :result}) 
 
         res.status(201).json({
-            message: "Case is created successfully."
+            message: "Case is created successfully.",token : req.token,refToken : req.refreshToken 
         });
     }
 }        
@@ -320,13 +324,13 @@ module.exports.getCase=(req,res,next)=>{
         {
             const error=new Error('Case is not found.');
             error.statusCode=404;
-            res.status(404).json({message:error.message})
+            res.status(404).json({message:error.message,token : req.token,refToken : req.refreshToken })
         }
         else
         {
 
             
-        res.status(200).json({case : result})
+        res.status(200).json({case : result,token : req.token,refToken : req.refreshToken })
         }
         
     })
@@ -352,13 +356,13 @@ module.exports.getProposal=(req,res,next)=>{
         {
             const error=new Error('Proposal is not found or you are not authenticated.');
             error.statusCode=404;
-            res.status(404).json({message:error.message})
+            res.status(404).json({message:error.message,token : req.token,refToken : req.refreshToken })
         }
         else
         {
 
             
-        res.status(200).json({proposal : result})
+        res.status(200).json({proposal : result,token : req.token,refToken : req.refreshToken })
         }
         
     })
@@ -386,7 +390,7 @@ module.exports.deleteCase = (req, res, next) => {
             if (!result.length) {
                 const err = new Error("Couldn't find post.")
                 err.statusCode = 404;
-                res.status(202).json({ message: err.message })
+                res.status(202).json({ message: err.message ,token : req.token,refToken : req.refreshToken })
                 //throw err;
             }
             if (req.id === result[0].creator) {
@@ -399,10 +403,10 @@ module.exports.deleteCase = (req, res, next) => {
             console.log(check)
             if (check) {
                 io.getIo().emit("cases",{action : "caseDeletion",caseId : caseId})
-                res.status(202).json({ message: "deleted successfully." })
+                res.status(202).json({ message: "deleted successfully." ,token : req.token,refToken : req.refreshToken })
             }
             else {
-                res.status(504).json({ message: "Couldn't delete post." })
+                res.status(504).json({ message: "Couldn't delete post.",token : req.token,refToken : req.refreshToken  })
             }
 
         })
@@ -441,11 +445,11 @@ module.exports.editCase = async (req, res, next) => {
             
             io.getIo().emit("cases",{action:"caseUpdating",case : updatedCase})
 
-            res.status(200).json({message : "Case is successfully edited."})
+            res.status(200).json({message : "Case is successfully edited.",token : req.token,refToken : req.refreshToken })
         }
         else
         {
-            res.status(400).json({message : "Case cannot be edited."})
+            res.status(400).json({message : "Case cannot be edited.",token : req.token,refToken : req.refreshToken })
         }
     }
     catch(err){
@@ -477,16 +481,16 @@ module.exports.changePassword = async (req, res, next) => {
         if(found[0])
         {
 
-            res.status(200).json({message : "password is successfully changed."})
+            res.status(200).json({message : "password is successfully changed.",token : req.token,refToken : req.refreshToken })
         }
         else
         {
-            res.status(400).json({message : "password cannot be changed."})
+            res.status(400).json({message : "password cannot be changed.",token : req.token,refToken : req.refreshToken })
         }
         }
         else
         {
-            res.status(400).json({message : "current password is not correct."}) 
+            res.status(400).json({message : "current password is not correct.",token : req.token,refToken : req.refreshToken }) 
         }
        
     }
@@ -512,12 +516,12 @@ module.exports.getOrgDonations = async (req, res, next) => {
 
                 const error = new Error('There are no donations so far !');
                 error.statusCode = 404;
-                res.status(404).json({ message: error.message })
+                res.status(404).json({ message: error.message,token : req.token,refToken : req.refreshToken  })
             }
             else {
 
 
-                res.status(200).json({ donations: result })
+                res.status(200).json({ donations: result ,token : req.token,refToken : req.refreshToken })
             }
 
       
@@ -569,7 +573,7 @@ module.exports.donationDone=async (req,res,next)=>{
                         if(found && updatedCase)
                         {
                             io.getIo().emit('donations',{action : 'donationDone',case:updatedCase,donId:donId,donation :acc})
-                            res.status(201).json({message : "Donation has been recieved."})
+                            res.status(201).json({message : "Donation has been recieved.",token : req.token,refToken : req.refreshToken })
                         }
 
                     }
@@ -577,16 +581,16 @@ module.exports.donationDone=async (req,res,next)=>{
                 }
                 else
                 {
-                    res.status(400).json({message : "duplicated."})
+                    res.status(400).json({message : "duplicated.",token : req.token,refToken : req.refreshToken })
                 }
             }
             else
             {
-                res.status(500).json({message : "error while recieving donation."})
+                res.status(500).json({message : "error while recieving donation.",token : req.token,refToken : req.refreshToken })
             }
         }
         else{
-            res.status(404).json({message : "donation is not found is not found."})
+            res.status(404).json({message : "donation is not found is not found.",token : req.token,refToken : req.refreshToken })
 
         }
 
@@ -615,12 +619,12 @@ module.exports.getDoneDonations = async (req, res, next) => {
 
                 const error = new Error('There are no donations so far !');
                 error.statusCode = 404;
-                res.status(404).json({ message: error.message })
+                res.status(404).json({ message: error.message,token : req.token,refToken : req.refreshToken  })
             }
             else {
 
 
-                res.status(200).json({ donations: result })
+                res.status(200).json({ donations: result ,token : req.token,refToken : req.refreshToken })
             }
 
       
@@ -634,3 +638,4 @@ module.exports.getDoneDonations = async (req, res, next) => {
             next(err)
 }
 }
+

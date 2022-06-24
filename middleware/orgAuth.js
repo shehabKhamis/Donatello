@@ -19,20 +19,20 @@ generateToken=(req,res,next)=>
         const token =jwt.sign({
             name : decoded.name,
             email : decoded.email,
-            id : decoded.orgId
+            id : decoded.id
 
-        },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'1h'})
+        },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'15m'})
         const refreshToken = jwt.sign({
             name : decoded.name,
             email : decoded.email,
-            id : decoded.orgId
+            id : decoded.id
 
         },process.env.ADMIN_REFRESH_TOKEN,{expiresIn:'1y'})
         req.id=decoded.id;
         req.name = decoded.name;
         req.token =token;
         req.refreshToken = refreshToken;
-       // console.log("hnaaaaaaaaahahahhahahahah",token)
+        console.log("hnaaaaaaaaahahahhahahahah",token)
         //return token , refreshToken;
    }
    catch(err){
@@ -67,13 +67,14 @@ module.exports=(req,res,next)=>
     }
     let decoded;
     try{
+        console.log("EL TOKEEEEEEEN EL KHAWAL",token)
          decoded= jwt.verify(token,process.env.ADMIN_ACCESS_TOKEN)
-       //  console.log("gggggggg",decoded)
+         console.log("gggggggg",decoded)
          req.id=decoded.id;
         req.name=decoded.name
     }
     catch(err){
-
+        console.log("YAAAAAAAA KHAAWWWWWWAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLL")
         err.statusCode=401;
         err.message="Not Authenticated as an admin!!"
        // res.status(401).json({message : err.message});
@@ -83,7 +84,7 @@ module.exports=(req,res,next)=>
         generateToken(req,res,next);
 
          console.log("55555555555555555555",req.token)
-         console.log("66666666666666666666666666666",req.token)
+         console.log("66666666666666666666666666666",req.refreshToken)
 
         //    const error = new Error("Not Authenticated");
         //    error.statusCode = 401;

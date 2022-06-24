@@ -17,12 +17,12 @@ generateRefToken=(req,res,next)=>
         console.log("gggggggg----------->>>>>>>>>>>>>>>>",decoded)
         const token =jwt.sign({
             email : decoded.email,
-            id : decoded.orgId
+            id : decoded.id
 
-        },process.env.USER_ACCESS_TOKEN,{expiresIn:'1h'})
+        },process.env.USER_ACCESS_TOKEN,{expiresIn:'1m'})
         const refreshToken = jwt.sign({
             email : decoded.email,
-            id : decoded.orgId
+            id : decoded.id
 
         },process.env.USER_REFRESH_TOKEN,{expiresIn:'1y'})
         req.id=decoded.id;
@@ -71,7 +71,7 @@ module.exports=(req,res,next)=>
 
         err.statusCode=401;
         err.message="Not Authenticated as a user!!"
-       // res.status(401).json({message : err.message});
+       //res.status(401).json({message : err.message});
 
         if(!decoded)
     {

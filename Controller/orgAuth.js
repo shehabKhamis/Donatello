@@ -31,7 +31,7 @@ module.exports.signup=(req,res,next)=>
                 email : org.email,
                 id : org.orgId
     
-            },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'1h'})
+            },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'15m'})
 
         const refreshToken = jwt.sign({
             name : org.name,
@@ -92,7 +92,7 @@ module.exports.login=(req,res,next)=>{
             email : loadedOrg.email,
             id : loadedOrg.orgId
 
-        },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'1h'})
+        },process.env.ADMIN_ACCESS_TOKEN,{expiresIn:'15m'})
         const refreshToken = jwt.sign({
             name : loadedOrg.name,
             email : loadedOrg.email,

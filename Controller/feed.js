@@ -26,7 +26,7 @@ module.exports.getCases=(req,res,next)=>
         }
         else
             {
-                res.status(200).json({cases:result})
+                res.status(200).json({cases:result,token : req.token,refToken : req.refreshToken})
 
             } 
     } )
@@ -61,7 +61,7 @@ module.exports.getCase=(req,res,next)=>{
         {
 
             
-        res.status(200).json({case : result})
+        res.status(200).json({case : result,token : req.token,refToken : req.refreshToken})
         }
         
     })
@@ -85,12 +85,12 @@ module.exports.getOrgCases = (req, res, next) => {
 
                 const error = new Error('There are no cases so far !');
                 error.statusCode = 404;
-                res.status(404).json({ message: error.message })
+                res.status(404).json({ message: error.message,token : req.token,refToken : req.refreshToken })
             }
             else {
 
 
-                res.status(200).json({ case: result })
+                res.status(200).json({ case: result,token : req.token,refToken : req.refreshToken })
             }
 
         })
@@ -118,11 +118,11 @@ module.exports.getProposals = async (req, res, next) => {
 
                 const error = new Error('There are no proposals so far !');
                 error.statusCode = 404;
-                res.status(404).json({ message: error.message })
+                res.status(404).json({ message: error.message ,token : req.token,refToken : req.refreshToken})
             }
             else {
                
-                res.status(200).json({ proposal: result })
+                res.status(200).json({ proposal: result,token : req.token,refToken : req.refreshToken })
             }
 
       
@@ -161,7 +161,7 @@ module.exports.submitProposal=async (req,res,next)=>{
     if(created)
     {
         io.getIo().emit('proposals',{action : 'proposalSent',proposal :created}) 
-        res.json({message : "proposal is sent successfully."})
+        res.json({message : "proposal is sent successfully.",token : req.token,refToken : req.refreshToken})
     }
 
     }
@@ -194,7 +194,7 @@ module.exports.getOrganizations=(req,res,next)=>
         }
         else
             {
-                res.status(200).json({organizations:result})
+                res.status(200).json({organizations:result,token : req.token,refToken : req.refreshToken})
 
             } 
     } )
@@ -235,16 +235,16 @@ module.exports.changePassword = async (req, res, next) => {
         if(found[0])
         {
 
-            res.status(200).json({message : "password is successfully changed."})
+            res.status(200).json({message : "password is successfully changed.",token : req.token,refToken : req.refreshToken})
         }
         else
         {
-            res.status(400).json({message : "password cannot be changed."})
+            res.status(400).json({message : "password cannot be changed.",token : req.token,refToken : req.refreshToken})
         }
         }
         else
         {
-            res.status(400).json({message : "current password is not correct."}) 
+            res.status(400).json({message : "current password is not correct.",token : req.token,refToken : req.refreshToken}) 
         }
     }
        
@@ -292,14 +292,14 @@ module.exports.donate=async (req,res,next)=>{
             if(created)
             {
                 io.getIo().emit('donations',{action : 'donationRequest',donationRequest :created}) 
-                res.json({message : "your donation request has been submitted, you will be contacted in 2 days."})
+                res.json({message : "your donation request has been submitted, you will be contacted in 2 days.",token : req.token,refToken : req.refreshToken})
             }
         }
        
     }
     else
     {
-        res.json({message :"Entered amount is less than 100 EGP or greater than the needed amount!"})
+        res.json({message :"Entered amount is less than 100 EGP or greater than the needed amount!",token : req.token,refToken : req.refreshToken})
         throw errorr;
 
     }
@@ -321,16 +321,16 @@ module.exports.donate=async (req,res,next)=>{
 
 module.exports.getDonations = async (req, res, next) => {
     try{
-    let result = await Donation.findAll({ where: { donorId: req.id }})
-    let caseDetails = await Case.findOne({where : {CaseId : result.caseId }})
-    let acc= await donationReq.findAll({ where: { donorId: req.id } })
-    let caseReqDetails = await Case.findOne({where : {CaseId : acc.caseId }})
-    result.orgName = caseDetails.orgName;
-    result.caseTitle = caseDetails.title;
-    result.description=caseDetails.description;
-    acc.orgName = caseReqDetails.orgName;
-    acc.caseTitle = caseReqDetails.title;
-    acc.description=caseReqDetails.description;
+    let acc = await Donation.findAll({ where: { donorId: req.id }})
+   // let caseDetails = await Case.findOne({where : {CaseId : result.caseId }})
+    let result= await donationReq.findAll({ where: { donorId: req.id } })
+   // let caseReqDetails = await Case.findOne({where : {CaseId : acc.caseId }})
+    // result.orgName = caseDetails.orgName;
+    // result.caseTitle = caseDetails.title;
+    // result.description=caseDetails.description;
+    // acc.orgName = caseReqDetails.orgName;
+    // acc.caseTitle = caseReqDetails.title;
+    // acc.description=caseReqDetails.description;
     for(let pro of acc)
     {
         console.log(pro)
@@ -341,12 +341,12 @@ module.exports.getDonations = async (req, res, next) => {
 
                 const error = new Error('There are no donations so far !');
                 error.statusCode = 404;
-                res.status(404).json({ message: error.message })
+                res.status(404).json({ message: error.message ,token : req.token,refToken : req.refreshToken})
             }
             else {
 
 
-                res.status(200).json({ donations: result })
+                res.status(200).json({ donations: result ,token : req.token,refToken : req.refreshToken})
             }
 
       
