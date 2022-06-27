@@ -14,7 +14,7 @@ generateRefToken=(req,res,next)=>
     let decoded;
     try{
         decoded= jwt.verify(refToken,process.env.USER_REFRESH_TOKEN)
-        console.log("gggggggg----------->>>>>>>>>>>>>>>>",decoded)
+        
         const token =jwt.sign({
             email : decoded.email,
             id : decoded.id
@@ -29,7 +29,7 @@ generateRefToken=(req,res,next)=>
       //  req.name = decoded.name;
         req.token =token;
         req.refreshToken = refreshToken;
-        console.log("hnaaaaaaaaahahahhahahahahkoSOKO",token)
+        
         //return token , refreshToken;
    }
    catch(err){
@@ -53,7 +53,7 @@ module.exports=(req,res,next)=>
 {
 
     const token = req.get('Authorization').split(' ')[1];
-    console.log(token)
+    
 
     if(!token)
     {
@@ -64,7 +64,7 @@ module.exports=(req,res,next)=>
     let decoded;
     try{
          decoded= jwt.verify(token,process.env.USER_ACCESS_TOKEN)
-         console.log(decoded)
+         
          req.id=decoded.id;
     }
     catch(err){

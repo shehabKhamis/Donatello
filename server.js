@@ -1,6 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-
+const helmet = require('helmet')
 const sequalize=require('./connection/sequelize')
 
 const User = require('./Model/User')
@@ -30,6 +30,8 @@ const socket = require('./socket');
 
 
 const app=express();
+
+app.use(helmet());
 
 app.use(bodyParser.json())
 

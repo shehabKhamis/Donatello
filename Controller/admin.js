@@ -25,8 +25,7 @@ const socket = require('../socket')
 module.exports.getOrgCases = (req, res, next) => {
 
    
-        console.log("ya 3aaaaaaaaaaaaaaaaaaaaaammmaememanan",req.token)
-        console.log("ya 3aaaaaaaaaaaaaaaaaaaaaammmaememanan EL IDD",req.id)
+      
     
     Case.findAll({ where: { creator: req.id } })
         .then(result => {
@@ -145,7 +144,7 @@ module.exports.acceptProposal=async (req,res,next)=>{
         const orgName= await Organization.findOne({where:{orgId : req.id},attributes : ['name']})
         let found = await Proposal.findOne({where : {proposalId : propId,orgId : req.id}, attributes: { exclude: ['proposalId','createdAt','updatedAt'] } })
         
-       // console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee ---------> ",found.dataValues)
+    
         if(found)
         {
             delete found.proposalId
@@ -224,7 +223,7 @@ module.exports.rejectProposal=async (req,res,next)=>{
     try
     {
         const found = await Proposal.findOne({where : {proposalId : propId,orgId : req.id}, attributes: { exclude: ['proposalId','createdAt','updatedAt'] } })
-        //console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee ---------> ",del)
+        
         if(found)
         {
             delete found.proposalId
@@ -276,7 +275,7 @@ module.exports.rejectProposal=async (req,res,next)=>{
 
 
 module.exports.postCase = async (req, res, next) => {
-    console.log(req.id)
+    
 
     try
     {const orgName= await Organization.findOne({where:{orgId : req.id},attributes : ['name']})
@@ -385,7 +384,7 @@ module.exports.deleteCase = (req, res, next) => {
     const caseId = req.params.caseId;
     Case.findAll({ where: { CaseId: caseId } })
         .then(result => {
-            console.log(result)
+           
 
             if (!result.length) {
                 const err = new Error("Couldn't find post.")
@@ -400,7 +399,7 @@ module.exports.deleteCase = (req, res, next) => {
 
         })
         .then(check => {
-            console.log(check)
+          
             if (check) {
                 io.getIo().emit("cases",{action : "caseDeletion",caseId : caseId})
                 res.status(202).json({ message: "deleted successfully." ,token : req.token,refToken : req.refreshToken })
@@ -543,7 +542,7 @@ module.exports.donationDone=async (req,res,next)=>{
     try
     {
         const fou = await donationReq.findOne({where : {donationId : donId,orgId : req.id}, attributes: { exclude: ['donationId','createdAt','updatedAt','status'] } })
-        //console.log("deeeeeeeeeeeeeeeeeleeeeeeeeeteee ---------> ",del)
+        
         if(fou)
         {
             delete fou.donationId;

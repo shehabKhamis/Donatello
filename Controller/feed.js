@@ -106,7 +106,7 @@ module.exports.getProposals = async (req, res, next) => {
     let rej= await rejectedProposal.findAll({ where: { submitter: req.id } })
     for(let pro of acc)
     {
-        console.log(pro)
+        
         result.push(pro);
     }
     for(let pro of rej)
@@ -276,7 +276,7 @@ module.exports.donate=async (req,res,next)=>{
         const name = await User.findOne({where :{id : req.id},attributes:['name']})
         if(name)
         {
-            console.log(name)
+            
             const created = await donationReq.create({
                 amount : req.body.amount,
                 phoneNum :req.body.phoneNumber,
@@ -322,18 +322,12 @@ module.exports.donate=async (req,res,next)=>{
 module.exports.getDonations = async (req, res, next) => {
     try{
     let acc = await Donation.findAll({ where: { donorId: req.id }})
-   // let caseDetails = await Case.findOne({where : {CaseId : result.caseId }})
+   
     let result= await donationReq.findAll({ where: { donorId: req.id } })
-   // let caseReqDetails = await Case.findOne({where : {CaseId : acc.caseId }})
-    // result.orgName = caseDetails.orgName;
-    // result.caseTitle = caseDetails.title;
-    // result.description=caseDetails.description;
-    // acc.orgName = caseReqDetails.orgName;
-    // acc.caseTitle = caseReqDetails.title;
-    // acc.description=caseReqDetails.description;
+   
     for(let pro of acc)
     {
-        console.log(pro)
+        
         result.push(pro);
     }    
 

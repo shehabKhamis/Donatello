@@ -51,11 +51,7 @@ const Case= sequelize.define('case',{
         type : Sequelize.FLOAT.UNSIGNED,
         allowNull : false
     },
-    tags : 
-    {
-        type : Sequelize.JSON,
-        allowNull : false
-    },
+    
     category : 
     {
         type : Sequelize.STRING,

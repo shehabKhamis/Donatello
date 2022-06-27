@@ -31,7 +31,7 @@ module.exports.signup=(req,res,next)=>
     
             },process.env.USER_ACCESS_TOKEN,{expiresIn:'15m'})
             const refreshToken = jwt.sign({
-                //name : user.name,
+               
                 email : user.email,
                 id : user.id
     
