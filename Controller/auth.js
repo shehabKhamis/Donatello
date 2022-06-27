@@ -29,11 +29,11 @@ module.exports.signup=(req,res,next)=>
                 email : user.email,
                 id : user.id
     
-            },process.env.USER_ACCESS_TOKEN,{expiresIn:'1m'})
+            },process.env.USER_ACCESS_TOKEN,{expiresIn:'15m'})
             const refreshToken = jwt.sign({
                 //name : user.name,
                 email : user.email,
-                id : user.orgId
+                id : user.id
     
             },process.env.USER_REFRESH_TOKEN,{expiresIn:'1y'})
     
@@ -88,11 +88,11 @@ module.exports.login=(req,res,next)=>{
             email : loadedUser.email,
             id : loadedUser.id
 
-        },process.env.USER_ACCESS_TOKEN,{expiresIn:'1m'})
+        },process.env.USER_ACCESS_TOKEN,{expiresIn:'15m'})
         const refreshToken = jwt.sign({
            
             email : loadedUser.email,
-            id : loadedUser.orgId
+            id : loadedUser.id
 
         },process.env.USER_REFRESH_TOKEN,{expiresIn:'1y'})
 

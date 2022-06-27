@@ -19,7 +19,7 @@ generateRefToken=(req,res,next)=>
             email : decoded.email,
             id : decoded.id
 
-        },process.env.USER_ACCESS_TOKEN,{expiresIn:'1m'})
+        },process.env.USER_ACCESS_TOKEN,{expiresIn:'15m'})
         const refreshToken = jwt.sign({
             email : decoded.email,
             id : decoded.id
